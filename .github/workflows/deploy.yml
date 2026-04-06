@@ -1,0 +1,74 @@
+name: QuarryForce CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Build React Dashboard
+      working-directory: ./admin-dashboard
+      run: |
+        npm install --legacy-peer-deps
+        npm run build
+
+    - name: Deploy to CloudPanel VPS
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        source: "admin-dashboard/build/*,qft-deployment/*"
+        target: "~/htdocs/YOUR_SITE_DOMAIN_HERE/"
+        strip_components: 1
+
+    - name: Restart PM2 Backend
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          cd ~/htdocs/YOUR_SITE_DOMAIN_HERE/qft-deployment
+          npm install
+          pm2 restart index.js || pm2 start index.js --name "quarryforce-backend"
+
+  build-mobile:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.22.x' # Or default to latest
+
+    - name: Build Android APK
+      working-directory: ./quarryforce_mobile
+      run: |
+        flutter pub get
+        flutter build apk --release --dart-define=API_URL=${{ secrets.MOBILE_API_URL }}
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: quarryforce-tracker-apk
+        path: quarryforce_mobile/build/app/outputs/flutter-apk/app-release.apk

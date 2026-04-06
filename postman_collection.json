@@ -1,0 +1,273 @@
+{
+  "info": {
+    "name": "QuarryForce APIs",
+    "description": "Complete API collection for local testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Settings",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/settings",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "settings"]
+        },
+        "description": "Fetch app configuration (company name, GPS radius, security settings)"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Login - First Time Device Binding",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@quarryforce.local\",\n  \"device_uid\": \"device-uuid-001\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "login"]
+        },
+        "description": "First login - binds device to account"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Login - Returning User (Same Device)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@quarryforce.local\",\n  \"device_uid\": \"device-uuid-001\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "login"]
+        },
+        "description": "Login with same device - should succeed"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Login - Different Device (BLOCKED)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@quarryforce.local\",\n  \"device_uid\": \"device-uuid-999\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "login"]
+        },
+        "description": "Login from different device - BLOCKED for security"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Check-in - Within GPS Radius (SUCCESS)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rep_id\": 1,\n  \"customer_id\": 1,\n  \"rep_lat\": 12.9716,\n  \"rep_lng\": 77.5946\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/checkin",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "checkin"]
+        },
+        "description": "Rep at exact customer location (0m away) - Should PASS"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Check-in - Outside GPS Radius (BLOCKED)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rep_id\": 1,\n  \"customer_id\": 1,\n  \"rep_lat\": 12.98,\n  \"rep_lng\": 77.60\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/checkin",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "checkin"]
+        },
+        "description": "Rep ~10km away from site - Should BLOCK check-in"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Submit Visit",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rep_id\": 1,\n  \"customer_id\": 1,\n  \"lat\": 12.9716,\n  \"lng\": 77.5946,\n  \"distance\": 25,\n  \"requirements\": {\n    \"material_type\": \"M-Sand\",\n    \"tonnage\": 500,\n    \"frequency\": \"weekly\",\n    \"project_deadline\": \"2026-03-31\"\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/visit/submit",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "visit", "submit"]
+        },
+        "description": "Save completed site visit after GPS verification"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Submit Fuel Log",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rep_id\": 1,\n  \"odometer_reading\": 45250,\n  \"fuel_quantity\": 40,\n  \"amount\": 2000,\n  \"lat\": 12.9716,\n  \"lng\": 77.5946\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/fuel/submit",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "fuel", "submit"]
+        },
+        "description": "Record fuel purchase with GPS location"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Admin - Get All Reps",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/admin/reps",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "admin", "reps"]
+        },
+        "description": "Admin: View all marketing reps"
+      },
+      "response": []
+    },
+    {
+      "name": "10. Admin - Get All Customers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/admin/customers",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "admin", "customers"]
+        },
+        "description": "Admin: View all customers with assignments"
+      },
+      "response": []
+    },
+    {
+      "name": "11. Admin - Reset Device Lock",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_id\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/admin/reset-device",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "admin", "reset-device"]
+        },
+        "description": "Admin: Unlock rep to use new phone"
+      },
+      "response": []
+    },
+    {
+      "name": "Test - Server Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/test",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["test"]
+        },
+        "description": "Check if server and database are connected"
+      },
+      "response": []
+    }
+  ]
+}

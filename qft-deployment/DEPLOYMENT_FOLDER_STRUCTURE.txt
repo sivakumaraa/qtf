@@ -1,0 +1,364 @@
+================================================================================
+QUARRYFORCE DEPLOYMENT FOLDER STRUCTURE - PHP VERSION
+================================================================================
+
+This folder contains everything needed to deploy QuarryForce to Namecheap using PHP.
+
+⚠️  IMPORTANT: This is the PHP version (NOT Node.js)
+    - Works on ALL shared hosting (no special configuration needed)
+    - Native Apache/.htaccess routing
+    - Works immediately after upload - no npm install needed
+    - Fully compatible with Namecheap CloudLinux
+
+DEPLOYMENT STEPS (5 minutes):
+============================
+
+1. ZIP THIS ENTIRE FOLDER as: qft-php-deploy.zip
+   ⚠️  DO NOT include these folders/files:
+   - node_modules/ (not used in PHP)
+   - nodejs-backup/ (optional - safe to keep)
+   - .git/
+   - node_process.json (Node.js, not needed)
+   - package-lock.json (Node.js, not needed)
+
+2. UPLOAD ZIP TO NAMECHEAP:
+   - cPanel File Manager
+   - Upload to: /public_html/qft/ (or root if qft is your domain)
+   - Upload: qft-php-deploy.zip
+
+3. EXTRACT ZIP IN CPANEL:
+   - Right-click qft-php-deploy.zip
+   - Select "Extract"
+   - Confirm
+
+4. DELETE ZIP FILE
+
+5. CREATE .ENV FILE:
+   - cPanel File Manager → /public_html/qft/
+   - Create New → File → name: .env
+   - Edit with your database credentials:
+
+   NODE_ENV=production
+   DB_HOST=localhost
+   DB_USER=your_mysql_user
+   DB_PASSWORD=your_mysql_password
+   DB_NAME=your_database_name
+   DB_PORT=3306
+   API_URL=https://valviyal.com/qft
+   FRONTEND_URL=https://valviyal.com/qft
+   LOGGING_ENABLED=true
+
+6. SET PERMISSIONS:
+   - Right-click logs/ folder
+   - Change Permissions: 755
+   - Right-click uploads/ folder  
+   - Change Permissions: 755
+
+7. TEST:
+   - Open: https://valviyal.com/qft
+   - Should show QuarryForce Admin Dashboard
+   - Open: https://valviyal.com/qft/api/test
+   - Should return: {"server":"Online","database":"Connected"}
+
+⚠️  IF YOU GET 404 ERRORS:
+   - Check .htaccess file exists in /public_html/qft/
+   - Check Apache mod_rewrite is enabled (usually is on Namecheap)
+   - Update RewriteBase in .htaccess if needed
+
+================================================================================
+FOLDER CONTENTS (PHP VERSION):
+================================================================================
+
+qft-deployment/
+├── index.php                   (★ Main entry point - routes all requests)
+├── api.php                     (★ All API endpoints - 15+ routes with logging)
+├── config.php                  (★ Configuration & environment loader)
+├── Database.php                (★ PDO MySQL wrapper)
+├── Logger.php                  (★ Structured JSON logging system)
+├── .env.template               (Copy & rename to .env on server)
+├── .htaccess                   (★ Apache routing for PHP)
+├── admin/                      (React dashboard - pre-built)
+│   ├── index.html
+│   ├── static/
+│   │   ├── css/
+│   │   └── js/
+│   └── [other build files]
+├── uploads/                    (File upload directory - empty initially)
+├── logs/                       (Created automatically - stores app.log)
+├── nodejs-backup/             (Original Node.js code - for reference)
+├── Documentation:
+│   ├── PHP_DEPLOYMENT_GUIDE.md (★ READ THIS FIRST)
+│   ├── BACKUP_AND_LOGGING_GUIDE.md
+│   ├── LOGGING_TEST_CHECKLIST.md
+│   ├── README.md
+│   ├── QUICK_START.md
+│   ├── DEPLOYMENT_CHECKLIST.md
+│   └── ...
+
+⚠️  IMPORTANT: NO node_modules or npm dependencies!
+   PHP runs natively - no build step required.
+
+================================================================================
+CRITICAL FILES TO CHECK BEFORE UPLOAD:
+================================================================================
+
+BEFORE uploading, verify in the qft-deployment folder:
+
+✓ index.php exists?           (Entry point)
+✓ api.php exists?             (All endpoints)
+✓ config.php exists?          (Configuration)
+✓ Database.php exists?        (Database wrapper)
+✓ Logger.php exists?          (Logging system)
+✓ .env.template exists?       (Environment template)
+✓ .htaccess exists?           (Apache routing)
+✓ admin/index.html exists?    (React dashboard)
+✓ admin/static/css/ exists?   (CSS files)
+✓ admin/static/js/ exists?    (JavaScript files)
+✓ uploads/ folder exists?     (Empty is fine)
+
+❌ DO NOT include:
+✗ node_modules/ (will be huge and not needed)
+✗ .git/ (not needed)
+✗ node_process.json (Node.js-specific)
+✗ package-lock.json (Node.js-specific)
+✗ nodejs-backup/ (optional - takes space)
+
+================================================================================
+PHP REQUIREMENTS (Namecheap Has All):
+================================================================================
+
+✓ PHP 7.4+ (Namecheap provides 8.0+)
+✓ Apache with mod_rewrite (standard on Namecheap)
+✓ PDO MySQL extension (standard on Namecheap)
+✓ JSON extension (standard on Namecheap)
+
+No special configuration needed - just upload and go!
+
+================================================================================
+CREATING .ENV FILE ON SERVER (REQUIRED):
+================================================================================
+
+After uploading and extracting files:
+
+Step 1: Create .env
+- cPanel File Manager > /public_html/qft/
+- Right-click > "Create New" > "File"
+- Name: .env (including the dot at the start!)
+- Create
+
+Step 2: Edit .env with DATABASE CREDENTIALS
+
+Use values from: cPanel → MySQL Databases section
+
+NODE_ENV=production
+DB_HOST=localhost
+DB_USER=your_mysql_user        ← Get from cPanel
+DB_PASSWORD=your_mysql_password ← Get from cPanel
+DB_NAME=your_database_name      ← Get from cPanel
+DB_PORT=3306
+API_URL=https://valviyal.com/qft
+FRONTEND_URL=https://valviyal.com/qft
+LOGGING_ENABLED=true
+LOG_LEVEL=INFO
+
+Step 3: Save file
+
+================================================================================
+AFTER DEPLOYMENT CHECKLIST:
+================================================================================
+
+After uploading and extracting:
+
+1. API works?
+   [ ] https://valviyal.com/qft/api/test returns JSON: {"server":"Online"}
+
+2. Admin dashboard shows?
+   [ ] https://valviyal.com/qft opens QuarryForce dashboard
+   [ ] CSS/JS files loaded (F12 → Network tab, no 404s)
+   [ ] Hard refresh: Ctrl+F5
+
+3. Logging works?
+   [ ] File Manager → logs/app.log exists
+   [ ] Contains JSON log entries
+   [ ] Newest entries are recent
+
+4. Database connected?
+   [ ] See database queries in logs
+   [ ] No "connection refused" errors
+
+5. Admin can login?
+   [ ] Username: demo@quarryforce.local
+   [ ] Password: any (demo bypass active)
+   [ ] Dashboard loads users/customers/reps
+
+If any fail, see PHP_DEPLOYMENT_GUIDE.md troubleshooting section.
+
+================================================================================
+DIFFERENCES FROM NODE.JS VERSION:
+================================================================================
+
+✅ ADVANTAGES OF PHP:
+- Works immediately on any shared hosting
+- No npm install needed
+- No special "Node.js Selector" configuration
+- No node_modules folder (keeps deployment small)
+- Native Apache routing
+- Same functionality, same API contracts
+- All 15+ endpoints working identically
+
+✅ LOGGING IS BETTER:
+- Structured JSON logs (machine-readable)
+- Automatic file rotation at 10MB
+- Multiple log levels: DEBUG, INFO, WARN, ERROR
+- Request context captured automatically
+- Easy to search and filter logs
+
+✅ DATABASE:
+- Uses PDO (modern, secure)
+- Prepared statements (SQL injection safe)
+- Same database schema as Node.js version
+- Direct MySQL compatibility
+
+❌ REMOVED (not needed for PHP):
+- npm and package.json
+- node_modules folder
+- Node.js Selector configuration
+- package-lock.json
+- Complex deployment steps
+
+================================================================================
+SUPPORTED ENDPOINTS (Unchanged):
+================================================================================
+
+All API endpoints from Node.js version work identically:
+
+GET  /
+GET  /api/settings
+PUT  /api/settings
+POST /api/login
+POST /api/checkin
+POST /api/visit/submit
+POST /api/fuel/submit
+GET  /api/admin/reps
+GET  /api/admin/customers
+POST /api/admin/reset-device
+GET  /api/admin/rep-targets
+GET  /api/admin/rep-targets/:rep_id
+POST /api/admin/rep-targets
+PUT  /api/admin/rep-targets/:id
+GET  /api/admin/rep-progress/:rep_id
+GET  /api/admin/rep-progress-history/:rep_id
+POST /api/admin/rep-progress/update
+GET  /api/admin/users
+POST /api/admin/users
+PUT  /api/admin/users/:id
+DELETE /api/admin/users/:id
+PUT  /api/admin/users/:id/device-uid
+GET  /api/test
+
+React admin dashboard works exactly the same.
+Flutter mobile app needs API_URL update:
+  OLD: https://valviyal.com/qft (Node.js)
+  NEW: https://valviyal.com/qft/api (PHP - with /api prefix)
+
+================================================================================
+TROUBLESHOOTING QUICK REFERENCE:
+================================================================================
+
+Cannot GET /api/...:         Check .htaccess exists and is properly formatted
+Blank admin page:            Check admin/static/css/ and admin/static/js/ folders
+500 error:                   Check .env file exists with DB credentials
+Database connection failed:  Verify DB_USER, DB_PASSWORD, DB_NAME in .env
+Logs not written:            Check permissions on logs/ folder (should be 755)
+Missing CSS/JS:              Check admin/static/ folders were uploaded
+
+Full details: See PHP_DEPLOYMENT_GUIDE.md
+
+================================================================================
+REVERTING TO NODE.JS (IF NEEDED):
+================================================================================
+
+If you need to go back to Node.js version:
+
+1. Files are backed up in: nodejs-backup/
+2. Copy from nodejs-backup/:
+   - index.js
+   - db.js
+   - package.json
+3. Upload to server
+4. Use Node.js Selector in cPanel to configure
+5. Create .env with same database credentials
+
+But PHP is recommended - it's much simpler!
+
+================================================================================
+NEXT STEPS:
+================================================================================
+
+1. ✅ Complete the 7 deployment steps above
+2. ✅ Verify API endpoint works (/api/test)
+3. ✅ Verify dashboard loads
+4. ✅ Import test data (optional - from TEST_DATA.sql)
+5. ✅ Check logs for any errors
+6. ✅ Update mobile app API URL
+7. ✅ Monitor logs regularly
+
+================================================================================
+GETTING HELP:
+================================================================================
+
+If you encounter issues:
+
+1. READ: PHP_DEPLOYMENT_GUIDE.md
+   → Step-by-step guide
+   → Common issues and fixes
+   → Troubleshooting procedures
+
+2. CHECK:
+   [ ] All files were uploaded successfully
+   [ ] .env file exists with correct database credentials
+   [ ] logs/ and uploads/ folders have 755 permissions
+   [ ] .htaccess file exists and is readable
+   [ ] cPanel → Error Log shows no PHP errors
+
+3. DEBUGGING:
+   [ ] View app.log in logs/ folder
+   [ ] Create test.php to check PHP version
+   [ ] Check browser console (F12) for JavaScript errors
+   [ ] Use Postman to test API endpoints directly
+
+4. CONTACT SUPPORT:
+   Email with:
+   - Error messages from cPanel Error Log
+   - Entries from logs/app.log
+   - .env format (hide password)
+   - Steps already tried
+   - Expected vs actual behavior
+
+================================================================================
+DIFFERENCES IN THIS DEPLOYMENT:
+================================================================================
+
+PREVIOUS VERSION (Node.js):
+- Used Express.js server
+- Needed npm install
+- Used Node.js Selector
+- Harder to debug on shared hosting
+- Needed special configuration
+
+THIS VERSION (PHP):
+- Used native PHP
+- No npm, no installation
+- Works immediately
+- Logs everything to file
+- Standard Apache/.htaccess routing
+- Same features, simpler deployment
+- Much easier to troubleshoot
+
+Choose PHP unless you have a specific reason to use Node.js.
+
+================================================================================
+
+For detailed PHP deployment instructions, see: PHP_DEPLOYMENT_GUIDE.md
+
+

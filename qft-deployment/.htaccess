@@ -1,0 +1,56 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /qft/
+  
+  # Set default index file
+  DirectoryIndex index.php index.html
+  
+  # IMPORTANT: Don't rewrite existing files or directories (must be FIRST!)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # Rewrite /static/ requests to /admin/static/ (where React assets actually are)
+  RewriteCond %{REQUEST_URI} ^/qft/static/ [NC]
+  RewriteRule ^static/(.*)$ /qft/admin/static/$1 [QSA,L]
+  
+  # API routes - pass to api.php (only for /api calls)
+  RewriteCond %{REQUEST_URI} ^/qft/api [NC]
+  RewriteRule ^api(/.*)?$ /qft/api.php?request=api$1 [QSA,L]
+  
+  # Admin API routes - pass to api.php for handling
+  RewriteCond %{REQUEST_URI} ^/qft/admin [NC]
+  RewriteCond %{REQUEST_URI} !/qft/admin/static/ [NC]
+  RewriteRule ^admin(/.*)?$ /qft/api.php?request=admin$1 [QSA,L]
+  
+  # Mobile app routing (Flutter web) - route to /mobile/index.html
+  RewriteCond %{REQUEST_URI} ^/qft/mobile [NC]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^mobile(.*)$ /qft/mobile/index.html [QSA,L]
+  
+  # React admin dashboard - route to index.html (catch-all for non-API routes)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !^/qft/api [NC]
+  RewriteRule ^(.*)$ /qft/admin/index.html [QSA,L]
+  
+</IfModule>
+
+# Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Cache control
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>

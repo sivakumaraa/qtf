@@ -1,0 +1,61 @@
+name: quarryforce_mobile
+description: QuarryForce Tracker - Mobile app for field sales representatives.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  provider: ^6.0.0
+
+  # HTTP Client
+  dio: ^5.0.0
+
+  # Location Services
+  location: ^5.0.3
+  geolocator: ^13.0.0
+
+  # Camera & Photo
+  image_picker: ^1.0.7
+
+  # Local Database
+  sqflite: ^2.4.1
+  path: ^1.8.2
+  path_provider: ^2.0.14
+
+  # Storage & Preferences
+  shared_preferences: ^2.1.1
+  flutter_secure_storage: ^9.2.2
+
+  # Device Information
+  device_info_plus: ^11.0.0
+
+  # Image Processing
+  image: ^4.0.0
+
+  # Utilities
+  uuid: ^4.0.0
+  intl: ^0.19.0
+  connectivity_plus: ^7.0.0
+  logger: ^2.6.2
+
+  # Other
+  permission_handler: ^11.3.0
+  json_annotation: ^4.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+  build_runner: ^2.4.1
+  json_serializable: ^6.7.0
+
+flutter:
+  uses-material-design: true

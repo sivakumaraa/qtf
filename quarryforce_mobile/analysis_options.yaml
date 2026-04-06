@@ -1,0 +1,10 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Suppress false positive null-aware check warnings in device_info handling
+    - dead_code: false
+
+analyzer:
+  errors:
+    dead_null_aware_expression: ignore

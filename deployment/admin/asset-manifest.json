@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/qft/static/css/main.2288aed2.css",
+    "main.js": "/qft/static/js/main.a6d5cb41.js",
+    "index.html": "/qft/index.html",
+    "main.2288aed2.css.map": "/qft/static/css/main.2288aed2.css.map",
+    "main.a6d5cb41.js.map": "/qft/static/js/main.a6d5cb41.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2288aed2.css",
+    "static/js/main.a6d5cb41.js"
+  ]
+}

@@ -1,0 +1,363 @@
+/* Main Dashboard Layout */
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header Styling */
+.dashboard-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.dashboard-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  color: #4b5563;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+  border-color: #667eea;
+  color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+}
+
+.tab-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Tab Content */
+.tab-content {
+  animation: fadeIn 0.3s ease;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card Styling */
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card-title {
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.stat-card-value {
+  color: #1f2937;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Table Styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table thead th {
+  background-color: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  color: #374151;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Button Styling */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.btn-success {
+  background: #10b981;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  border-left: 4px solid #dc2626;
+}
+
+/* Success Message */
+.success-message {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  border-left: 4px solid #22c55e;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.spinner {
+  border: 3px solid rgba(102, 126, 234, 0.1);
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .dashboard-header {
+    padding: 20px;
+  }
+
+  .tab-navigation {
+    gap: 8px;
+  }
+
+  .tab-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  .tab-content {
+    padding: 16px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
+
+  table thead th,
+  table tbody td {
+    padding: 8px;
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease;
+}
+
+/* Gradient overlay */
+.gradient-overlay {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 12px;
+  padding: 1px;
+}
+
+/* Animations */
+@keyframes pulse-once {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-once {
+  animation: pulse-once 0.6s ease-in-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideInUp 0.3s ease;
+}
+
+/* Progress Bar Animation */
+@keyframes fillProgress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-width, 100%);
+  }
+}
+
+.progress-animated {
+  animation: fillProgress 0.8s ease-out;
+}
